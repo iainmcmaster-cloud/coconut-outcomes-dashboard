@@ -54,7 +54,7 @@ export default function App() {
       base = [...STAFF_GROUPS]
     }
     if (filters.staffGroup) base = base.filter(r => r.name === filters.staffGroup)
-    return base
+    return base.sort((a, b) => sumCounts(b.c) - sumCounts(a.c))
   }, [filters.location, filters.staffGroup])
 
   const svcRows = useMemo(() =>
