@@ -43,7 +43,7 @@ export const pct = (n: number, t: number): string =>
   t ? (n / t * 100).toFixed(1) : '0.0'
 
 export const fmt = (n: number): string =>
-  Number(n).toLocaleString()
+  Number(n).toLocaleString('en-US')
 
 export const deltaStr = (curr: number, prev: number): string => {
   const d = ((curr - prev) / prev * 100).toFixed(1)
