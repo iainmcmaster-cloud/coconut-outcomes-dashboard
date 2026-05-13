@@ -101,10 +101,10 @@ export default function OutcomesTable({ title, rows, firstLabel, extraCols = [] 
                 </td>
               </tr>
             ) : (
-              sortedRows.map((row, ri) => {
+              sortedRows.map((row) => {
                 const total = sumCounts(row.c)
                 return (
-                  <tr key={ri} className="border-t border-gray-50 hover:bg-blue-50">
+                  <tr key={row.name} className="border-t border-gray-50 hover:bg-blue-50">
                     <td className="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">{row.name}</td>
                     {extraCols.map(ec => (
                       <td key={ec.key} className="px-3 py-2 text-gray-600 whitespace-nowrap">
