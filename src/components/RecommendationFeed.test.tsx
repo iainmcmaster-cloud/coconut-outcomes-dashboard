@@ -59,3 +59,37 @@ describe('RecommendationFeed — card cycling', () => {
     expect(screen.getByText('11 remaining')).toBeInTheDocument()
   })
 })
+
+describe('RecommendationFeed — priority selector', () => {
+  it('active 4 cards are unchanged when priority is switched', async () => {
+    render(<RecommendationFeed />)
+    const initialTitles = RECOMMENDATIONS.slice(0, 4).map(r => r.title)
+
+    await userEvent.click(screen.getByRole('button', { name: 'Customer Experience' }))
+
+    initialTitles.forEach(title => {
+      expect(screen.getByText(title)).toBeInTheDocument()
+    })
+    expect(screen.queryByText(RECOMMENDATIONS[8].title)).not.toBeInTheDocument()
+  })
+
+  it('next card after an act comes from the priority dimension', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    render(<RecommendationFeed />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Customer Experience' }))
+    fireEvent.click(screen.getByRole('button', { name: RECOMMENDATIONS[0].ctaLabel }))
+    await act(async () => { vi.advanceTimersByTime(400) })
+
+    expect(screen.getByText(RECOMMENDATIONS[8].title)).toBeInTheDocument()
+    vi.useRealTimers()
+  })
+
+  it('toggling the active priority pill resets to default order', async () => {
+    render(<RecommendationFeed />)
+    const prodButton = screen.getByRole('button', { name: 'Productivity' })
+    await userEvent.click(prodButton)
+    await userEvent.click(prodButton)
+    expect(screen.getByText(RECOMMENDATIONS[0].title)).toBeInTheDocument()
+  })
+})
