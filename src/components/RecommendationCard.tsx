@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { Dimension, DismissReason } from '../data/recommendations'
 import { DISMISS_REASONS } from '../data/recommendations'
 
@@ -28,6 +28,14 @@ export default function RecommendationCard({
   const [collapsed, setCollapsed] = useState(false)
   const [entered, setEntered] = useState(!isNew)
 
+  const collapseTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (collapseTimer.current !== null) clearTimeout(collapseTimer.current)
+    }
+  }, [])
+
   useEffect(() => {
     if (!entered) {
       const raf = requestAnimationFrame(() => setEntered(true))
@@ -38,7 +46,7 @@ export default function RecommendationCard({
   function handleAct() {
     setCardState('acting')
     onAct()
-    setTimeout(() => setCollapsed(true), 300)
+    collapseTimer.current = setTimeout(() => setCollapsed(true), 300)
   }
 
   function handleDismiss() {
@@ -48,7 +56,7 @@ export default function RecommendationCard({
   function handleReason(reason: DismissReason) {
     setCardState('dismissed')
     onDismiss(reason)
-    setTimeout(() => setCollapsed(true), 200)
+    collapseTimer.current = setTimeout(() => setCollapsed(true), 200)
   }
 
   const innerCls = [
