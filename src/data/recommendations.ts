@@ -1,5 +1,6 @@
 export type Dimension = 'Growth' | 'Productivity' | 'Customer Experience'
 export type DismissReason = 'Not relevant' | 'Already done' | 'Do later'
+export const DISMISS_REASONS: DismissReason[] = ['Not relevant', 'Already done', 'Do later']
 
 export interface Recommendation {
   id: string
