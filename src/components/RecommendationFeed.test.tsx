@@ -93,3 +93,14 @@ describe('RecommendationFeed — priority selector', () => {
     expect(screen.getByText(RECOMMENDATIONS[0].title)).toBeInTheDocument()
   })
 })
+
+describe('RecommendationFeed — empty state', () => {
+  it("shows \"You're all caught up.\" when all cards are removed", async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    render(<RecommendationFeed recommendations={[RECOMMENDATIONS[0]]} />)
+    fireEvent.click(screen.getByRole('button', { name: RECOMMENDATIONS[0].ctaLabel }))
+    await act(async () => { vi.advanceTimersByTime(400) })
+    expect(screen.getByText("You're all caught up.")).toBeInTheDocument()
+    vi.useRealTimers()
+  })
+})
