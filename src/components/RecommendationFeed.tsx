@@ -33,11 +33,6 @@ export default function RecommendationFeed({ recommendations = RECOMMENDATIONS }
   }, [])
 
   const recMap = new Map(recommendations.map(r => [r.id, r]))
-  const activeSet = new Set(activeIds)
-  const waiting = sortByPriority(
-    recommendations.filter(r => !removed.has(r.id) && !activeSet.has(r.id)),
-    priority
-  )
   const activeRecs = activeIds
     .map(id => recMap.get(id))
     .filter((r): r is Recommendation => r !== undefined)
