@@ -1,3 +1,4 @@
+@import 'tailwindcss';
 @import '@coconut-software/ui/dist/utilities.css';
 
 *, *::before, *::after {

@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import RecommendationFeed from './components/RecommendationFeed'
 import TopNav from './components/TopNav'
 import FilterBar from './components/FilterBar'
 import KpiTile from './components/KpiTile'
@@ -79,6 +80,8 @@ export default function App() {
       <FilterBar filters={filters} locationOptions={locationOptions} onChange={setFilters} />
 
       <main className="p-5 max-w-screen-2xl">
+        <RecommendationFeed />
+
         {/* KPI row */}
         <div className="grid grid-cols-2 gap-3 max-w-2xl mb-5">
           <KpiTile
