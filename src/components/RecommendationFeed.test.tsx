@@ -73,16 +73,19 @@ describe('RecommendationFeed — priority selector', () => {
     expect(screen.queryByText(RECOMMENDATIONS[8].title)).not.toBeInTheDocument()
   })
 
-  it('next card after an act comes from the priority dimension', async () => {
-    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
-    render(<RecommendationFeed />)
+  describe('with fake timers', () => {
+    beforeEach(() => { vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] }) })
+    afterEach(() => { vi.useRealTimers() })
 
-    fireEvent.click(screen.getByRole('button', { name: 'Customer Experience' }))
-    fireEvent.click(screen.getByRole('button', { name: RECOMMENDATIONS[0].ctaLabel }))
-    await act(async () => { vi.advanceTimersByTime(400) })
+    it('next card after an act comes from the priority dimension', async () => {
+      render(<RecommendationFeed />)
 
-    expect(screen.getByText(RECOMMENDATIONS[8].title)).toBeInTheDocument()
-    vi.useRealTimers()
+      fireEvent.click(screen.getByRole('button', { name: 'Customer Experience' }))
+      fireEvent.click(screen.getByRole('button', { name: RECOMMENDATIONS[0].ctaLabel }))
+      await act(async () => { vi.advanceTimersByTime(400) })
+
+      expect(screen.getByText(RECOMMENDATIONS[8].title)).toBeInTheDocument()
+    })
   })
 
   it('toggling the active priority pill resets to default order', async () => {
@@ -95,12 +98,13 @@ describe('RecommendationFeed — priority selector', () => {
 })
 
 describe('RecommendationFeed — empty state', () => {
+  beforeEach(() => { vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] }) })
+  afterEach(() => { vi.useRealTimers() })
+
   it("shows \"You're all caught up.\" when all cards are removed", async () => {
-    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
     render(<RecommendationFeed recommendations={[RECOMMENDATIONS[0]]} />)
     fireEvent.click(screen.getByRole('button', { name: RECOMMENDATIONS[0].ctaLabel }))
     await act(async () => { vi.advanceTimersByTime(400) })
     expect(screen.getByText("You're all caught up.")).toBeInTheDocument()
-    vi.useRealTimers()
   })
 })
